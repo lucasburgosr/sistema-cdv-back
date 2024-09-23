@@ -19,7 +19,7 @@ const port = 3000;
 
 // Configuración de CORS
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'https://sistema-cdv-front.vercel.app/',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type'],
 };
