@@ -1,4 +1,4 @@
-const precioMinoristaRepository = require('../repositories/precioMinoristaRepository');
+const precioMinoristaRepository = require('../repositories/PrecioMinoristaRepository');
 
 class PrecioMinoristaService {
     async createPrecioMinorista(data) {
