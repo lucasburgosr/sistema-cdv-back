@@ -238,31 +238,42 @@ class CostoYMargenService {
 
 
     async createCostoYMargen(data) {
-        // Recorremos las claves del objeto `data` y convertimos los valores vacíos a 0,
+        // Eliminar campos innecesarios
+        const { cantidadMinVentaDistri, cantidadMinVentaMayorista, costo, ...filteredData } = data;
+    
+        // Recorremos las claves del objeto `filteredData` y convertimos los valores vacíos a 0,
         // y aplicamos `parseFloat` a los campos numéricos.
         const cleanedData = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => {
+            Object.entries(filteredData).map(([key, value]) => {
                 // Si el valor es una cadena vacía, lo convertimos a 0
                 if (value === '') return [key, 0];
-
+    
+                // Si el valor es booleano y es NaN, lo convertimos a 0 o 1
+                if (key === 'iva') {
+                    return [key, (value === true || value === 'true') ? 1 : 0];
+                }
+    
                 // Si el valor es numérico (y no es nulo o indefinido), lo convertimos a float
                 if (!isNaN(value) && value !== null && value !== undefined) {
                     return [key, parseFloat(value)];
                 }
-
+    
                 // Para todos los otros valores, los dejamos tal cual
                 return [key, value];
             })
         );
-
+    
+        console.log(cleanedData);
+    
         // Crear el registro con los valores modificados
         const costoYMargen = await costoYMargenRepository.create(cleanedData);
-
+    
         // Completar las tablas de precios con la lógica correspondiente
         await this.completarTablasPrecios(data.productoId, costoYMargen);
-
+    
         return costoYMargen;
     }
+    
 
 
     async updateCostoYMargen(id, data) {
