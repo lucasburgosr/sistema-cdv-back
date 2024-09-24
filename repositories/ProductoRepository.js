@@ -69,8 +69,9 @@ class ProductoRepository {
     }
 
     async delete(id) {
-        return await Producto.destroy();
+        return await Producto.destroy({ where: { id } });
     }
+    
 
 }
 

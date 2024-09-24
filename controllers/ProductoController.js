@@ -7,7 +7,7 @@ class ProductoController {
             res.status(201).json(producto);
         } catch (error) {
             console.error('Error al crear producto:', error); // Esto mostrará más detalles en el log
-        res.status(500).json({ message: 'Error al crear el producto', error: error.message });
+            res.status(500).json({ message: 'Error al crear el producto', error: error.message });
         }
     }
 
@@ -33,14 +33,16 @@ class ProductoController {
         }
     }
 
+    // En productoController.js
     async delete(req, res) {
         try {
             await productoService.deleteProducto(req.params.id);
-            res.status(204).send();
+            res.status(204).send();  // Estado 204 para indicar que no hay contenido en la respuesta
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
+
 
     async getAll(req, res) {
         try {

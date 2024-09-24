@@ -23,29 +23,30 @@ Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'Categoria'})
 Categoria.hasMany(Producto, { foreignKey: 'categoriaId', as: 'Producto' })
 
 //Relación entre Producto y PrecioMercadoLibre
-PrecioMercadoLibre.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto' })
+PrecioMercadoLibre.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE' })
 Producto.hasOne(PrecioMercadoLibre, { foreignKey: 'productoId', as: 'PrecioMercadoLibre' })
 
 //Relación entre Producto y PrecioDistribución
-PrecioDistribucion.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto' })
+PrecioDistribucion.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE' })
 Producto.hasOne(PrecioDistribucion, { foreignKey: 'productoId', as: 'PrecioDistribucion' })
 
 //Relación entre Producto y PrecioMayorista
-PrecioMayorista.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto' })
+PrecioMayorista.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE' })
 Producto.hasOne(PrecioMayorista, { foreignKey: 'productoId', as: 'PrecioMayorista' })
 
 //Relación entre Producto y PrecioMinorista
-PrecioMinorista.belongsTo(Producto, { foreignKey: 'productoId',as: 'Producto' })
+PrecioMinorista.belongsTo(Producto, { foreignKey: 'productoId',as: 'Producto', onDelete: 'CASCADE' })
 Producto.hasOne(PrecioMinorista, { foreignKey: 'productoId', as: 'PrecioMinorista' })
 
 //Relación entre Producto y PrecioSobremesa
-PrecioSobremesa.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto' })
+PrecioSobremesa.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE' })
 Producto.hasOne(PrecioSobremesa, { foreignKey: 'productoId', as: 'PrecioSobremesa' })
 
 //Relación entre Producto y PrecioBuenosAires
-PrecioBuenosAires.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto'})
+PrecioBuenosAires.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE'})
 Producto.hasOne(PrecioBuenosAires, { foreignKey: 'productoId', as: 'PrecioBuenosAires' })
 
 //Relación entre Producto y CostoYMargen
-CostoYMargen.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto' })
-Producto.hasOne(CostoYMargen, { foreignKey: 'productoId', as: 'CostoYMargen' })
+CostoYMargen.belongsTo(Producto, { foreignKey: 'productoId', as: 'Producto', onDelete: 'CASCADE' });
+Producto.hasOne(CostoYMargen, { foreignKey: 'productoId', as: 'CostoYMargen' });
+

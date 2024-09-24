@@ -5,6 +5,7 @@ const precioDistribucionRepository = require('../repositories/PrecioDistribucion
 const precioMercadoLibreRepository = require('../repositories/PrecioMercadoLibreRepository');
 const precioBsAsRepository = require('../repositories/PrecioBuenosAiresRepository');
 const productoRepository = require('../repositories/ProductoRepository');
+const costoYMargenRepository = require('../repositories/CostoYMargenRepository');
 
 class ProductoService {
 

@@ -13,14 +13,14 @@ class CostoYMargenService {
     // Método que calcula los precios minoristas, mayoristas, para Buenos Aires y para Distribución
     calcularPrecio(costoConIva, descuento, descuentoPp, acciones1, acciones2, margen, unidades) {
         const descuentoDecimal = descuento / 100;
-        const descuentoPpDecimal = descuentoPp / 100;
-        const margenMinoristaDecimal = margen / 100;
+        const margenDecimal = margen / 100;
+        const descuentoPpDecimal = descuentoPp === 0 ? 0 : descuentoPp / 100
 
         const precioUnidad = Math.round(costoConIva *
             (1 - descuentoDecimal) *
             (1 - descuentoPpDecimal) *
             (acciones1 / (acciones1 + acciones2)) *
-            (1 + margenMinoristaDecimal));
+            (1 + margenDecimal));
 
         const precioCaja = Math.round(precioUnidad * unidades);
 
@@ -128,6 +128,8 @@ class CostoYMargenService {
         //Extrae las propiedades necesarias para el cálculo de los precios
         const { costoConIva, descuento, descuentoPp, acciones1, acciones2, margenMay, margenMin, margenBsAs, margenSobremesa, margenDistri, margenMeLi } = costosYMargenes;
 
+        console.log('ESTE ES EL DESCUENTO PP QUE LLEGA ACÁ: \n\n\n', descuentoPp);
+
         //Busca el producto al que se le están actualizando los precios para obtener sus unidades
         const producto = await productoRepository.findById(productoId);
 
@@ -169,7 +171,7 @@ class CostoYMargenService {
 
         const parametrosMeLi = await parametrosMeLiRepository.findById(1);
 
-        if(parametrosMeLi) {
+        if (parametrosMeLi) {
             await this.completarTablaMercadoLibre(parametrosMeLi);
         }
 
@@ -178,20 +180,20 @@ class CostoYMargenService {
     async completarTablaMercadoLibre(parametrosMeLi) {
         try {
             console.log('Y ACÁ SE ESTÁ EJECUTANDO???', parametrosMeLi);
-        
+
             const costosYMargenes = await costoYMargenRepository.findAll();
             const { margenLimite, precioLimite1, precioLimite2, costoEnvio, cf1, cf2, tasa3, tasa6, tasa12 } = parametrosMeLi;
-            
+
             let actualizacionesRealizadas = false; // Variable para rastrear si se realizaron actualizaciones
-    
+
             for (const costo of costosYMargenes) {
                 try {
                     console.log('QUE TIENE ESTE COSTO???', costo);
                     const producto = await productoRepository.findById(costo.productoId);
-        
+
                     console.log('PARAMETROS MELI: ', parametrosMeLi);
                     console.log('UNIDADES', producto.unidades);
-        
+
                     const preciosMercadoLibre = this.calcularPrecioMercadoLibre(
                         costo.costoConIva,
                         producto.unidades,
@@ -206,9 +208,9 @@ class CostoYMargenService {
                         tasa6,
                         tasa12
                     );
-        
+
                     console.log('CREÓ LOS PRECIOS DE MERCADO LIBRE???', producto.id, preciosMercadoLibre);
-        
+
                     // Actualización en la base de datos
                     await precioMercadoLibreRepository.updateByProductoId(producto.id, {
                         precioMLIndividual: preciosMercadoLibre.precioMeLiIndividual,
@@ -220,29 +222,48 @@ class CostoYMargenService {
                         precioCuotas6Caja: preciosMercadoLibre.precioCuotas6Caja,
                         precioCuotas12Caja: preciosMercadoLibre.precioCuotas12Caja,
                     });
-                    
+
                     actualizacionesRealizadas = true; // Indica que se realizó al menos una actualización
                 } catch (error) {
                     console.error('Error al actualizar precios para producto:', costo.productoId, error);
                 }
             }
-            
+
             return actualizacionesRealizadas; // Retorna si se realizaron actualizaciones
         } catch (error) {
             console.error('Error al completar la tabla de Mercado Libre:', error);
             return false; // Retorna false en caso de error
         }
     }
-    
+
 
     async createCostoYMargen(data) {
-        const costoYMargen = await costoYMargenRepository.create(data);
+        // Recorremos las claves del objeto `data` y convertimos los valores vacíos a 0,
+        // y aplicamos `parseFloat` a los campos numéricos.
+        const cleanedData = Object.fromEntries(
+            Object.entries(data).map(([key, value]) => {
+                // Si el valor es una cadena vacía, lo convertimos a 0
+                if (value === '') return [key, 0];
+
+                // Si el valor es numérico (y no es nulo o indefinido), lo convertimos a float
+                if (!isNaN(value) && value !== null && value !== undefined) {
+                    return [key, parseFloat(value)];
+                }
+
+                // Para todos los otros valores, los dejamos tal cual
+                return [key, value];
+            })
+        );
+
+        // Crear el registro con los valores modificados
+        const costoYMargen = await costoYMargenRepository.create(cleanedData);
 
         // Completar las tablas de precios con la lógica correspondiente
         await this.completarTablasPrecios(data.productoId, costoYMargen);
 
         return costoYMargen;
     }
+
 
     async updateCostoYMargen(id, data) {
 

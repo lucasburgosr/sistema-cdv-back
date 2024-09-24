@@ -39,7 +39,7 @@ class CostoYMargenRepository {
     
 
     async delete(id) {
-        return await CostoYMargen.destroy();
+        return await CostoYMargen.destroy({ where: { id } });
     }
 
 }
