@@ -5,7 +5,8 @@ const precioMinoristaRepository = require('../repositories/PrecioMinoristaReposi
 const precioSobremesaRepository = require('../repositories/PrecioSobremesaRepository');
 const precioDistribucionRepository = require('../repositories/PrecioDistribucionRepository')
 const productoRepository = require('../repositories/ProductoRepository')
-const precioMercadoLibreRepository = require('../repositories/PrecioMercadoLibreRepository.js')
+const precioMercadoLibreRepository = require('../repositories/PrecioMercadoLibreRepository.js');
+const parametrosMeLiRepository = require('../repositories/ParametrosMeLiRepository.js');
 
 class CostoYMargenService {
 
@@ -165,6 +166,12 @@ class CostoYMargenService {
             precioMayUnidad: precioDistribucion.precioUnidad,
             precioMayCaja: precioDistribucion.precioCaja
         })
+
+        const parametrosMeLi = await parametrosMeLiRepository.findById(1);
+
+        if(parametrosMeLi) {
+            await this.completarTablaMercadoLibre(parametrosMeLi);
+        }
 
     }
 
