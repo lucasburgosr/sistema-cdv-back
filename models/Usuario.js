@@ -14,6 +14,11 @@ Usuario.init({
         allowNull: false,
         field: 'nombre_de_usuario'
     },
+    clave: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: "clave_usuario"
+    },
     esAdmin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

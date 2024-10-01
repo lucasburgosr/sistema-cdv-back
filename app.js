@@ -13,6 +13,10 @@ const costoYMargenRoutes = require('./routes/CostoYMargenRoutes.js')
 const categoriaRoutes = require('./routes/CategoriaRoutes.js')
 const varietalRoutes = require('./routes/VarietalRoutes.js')
 const parametrosMeLiRoutes = require('./routes/ParametrosMeLiRoutes.js')
+const usuariosRoutes = require('./routes/UsuarioRoutes.js')
+const promocionRoutes = require('./routes/PromocionRoutes.js')
+const authRoutes = require('./routes/AuthRoutes.js')
+const usuarioService = require('./services/UsuarioService.js')
 const cors = require('cors');
 const app = express();
 const port = 3000;
@@ -46,6 +50,34 @@ app.use('/api', precioDistribucionRoutes);
 app.use('/api', precioBuenosAiresRoutes);
 app.use('/api', costoYMargenRoutes);
 app.use('/api', parametrosMeLiRoutes);
+app.use('/api', usuariosRoutes);
+app.use('/api', promocionRoutes);
+app.use('/api', authRoutes);
+
+/* const crearUsuario = async () => {
+    try {
+        const nuevoUsuario = {
+            id: 1,
+            nombreUsuario: "Usuario de prueba",
+            clave: "usuario123",
+            esAdmin: true,
+            vistaPrecioMay: true,
+            vistaPrecioMin: true,
+            vistaPrecioMeLi: true,
+            vistaPrecioDistri: true,
+            vistaPrecioDepo: true,
+            vistaPrecioBsAs: true, // Cambia vistaPreciosBsAs por vistaPrecioBsAs
+            vistaPrecioSobremesa: true,
+        };
+
+        const usuarioCreado = await usuarioService.createUsuario(nuevoUsuario);
+        console.log('Usuario creado:', usuarioCreado);
+    } catch (error) {
+        console.error('Error al crear el usuario:', error);
+    }
+};
+
+crearUsuario(); */
 
 // Iniciar el servidor
 app.listen(port, () => {

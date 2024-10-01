@@ -1,5 +1,6 @@
 const Bodega = require('../models/Bodega.js');
 const Producto = require('../models/Producto.js')
+const Varietal = require('../models/Varietal.js')
 const Categoria = require('../models/Categoria.js');
 const PrecioMinorista = require('../models/PrecioMinorista.js');
 const PrecioMayorista = require('../models/PrecioMayorista.js');
@@ -31,6 +32,11 @@ class ProductoRepository {
                     attributes: ['nombre']
                 },
                 {
+                    model: Varietal,
+                    as: 'Varietal',
+                    attributes: ['nombre']
+                },
+                {
                     model: PrecioMinorista,
                     as: 'PrecioMinorista',
                     attributes: ['precioUnidad', 'precioCaja', 'esMin']
@@ -59,6 +65,11 @@ class ProductoRepository {
                     model: PrecioMercadoLibre,
                     as: 'PrecioMercadoLibre',
                     attributes: ['precioMLIndividual', 'precioMLCaja', 'precioCuotas3Individual', 'precioCuotas6Individual', 'precioCuotas12Individual', 'precioCuotas3Caja', 'precioCuotas6Caja', 'precioCuotas12Caja', 'esMeLi']
+                },
+                {
+                    model: CostoYMargen,
+                    as: 'CostoYMargen',
+                    attributes: ['costoConIva', 'margenMin'],
                 }
             ]
         });
